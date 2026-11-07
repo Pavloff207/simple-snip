@@ -1,8 +1,8 @@
 import AppKit
 
-/// A full-screen borderless window that shows the frozen screen and takes the freeform drawing.
+/// A full-screen borderless window that shows the frozen screen and takes the snip outline.
 final class SnipOverlayWindow: NSWindow {
-    init(frozen: FrozenScreen, onFinish: @escaping (CGImage?) -> Void) {
+    init(frozen: FrozenScreen, mode: SnipMode, onFinish: @escaping (CGImage?) -> Void) {
         super.init(
             contentRect: frozen.screen.frame,
             styleMask: .borderless,
@@ -15,9 +15,10 @@ final class SnipOverlayWindow: NSWindow {
         hasShadow = false
         isReleasedWhenClosed = false
         collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .stationary, .ignoresCycle]
-        contentView = FreeformSnipView(
+        contentView = SnipSelectionView(
             frozenImage: frozen.image,
             scale: frozen.screen.backingScaleFactor,
+            mode: mode,
             onFinish: onFinish
         )
         setFrame(frozen.screen.frame, display: false)
@@ -26,15 +27,19 @@ final class SnipOverlayWindow: NSWindow {
     override var canBecomeKey: Bool { true }
 }
 
-final class FreeformSnipView: NSView {
+/// Takes a freeform outline or a dragged rectangle, depending on the snip mode.
+final class SnipSelectionView: NSView {
     private let frozenImage: CGImage
     private let scale: CGFloat
+    private let mode: SnipMode
     private let onFinish: (CGImage?) -> Void
     private var path: NSBezierPath?
+    private var dragStart: CGPoint = .zero
 
-    init(frozenImage: CGImage, scale: CGFloat, onFinish: @escaping (CGImage?) -> Void) {
+    init(frozenImage: CGImage, scale: CGFloat, mode: SnipMode, onFinish: @escaping (CGImage?) -> Void) {
         self.frozenImage = frozenImage
         self.scale = scale
+        self.mode = mode
         self.onFinish = onFinish
         super.init(frame: .zero)
     }
@@ -76,14 +81,31 @@ final class FreeformSnipView: NSView {
     }
 
     override func mouseDown(with event: NSEvent) {
-        let newPath = NSBezierPath()
-        newPath.move(to: convert(event.locationInWindow, from: nil))
-        path = newPath
+        dragStart = convert(event.locationInWindow, from: nil)
+        switch mode {
+        case .freeform:
+            let newPath = NSBezierPath()
+            newPath.move(to: dragStart)
+            path = newPath
+        case .rectangle:
+            path = NSBezierPath(rect: CGRect(origin: dragStart, size: .zero))
+        }
         needsDisplay = true
     }
 
     override func mouseDragged(with event: NSEvent) {
-        path?.line(to: convert(event.locationInWindow, from: nil))
+        let point = convert(event.locationInWindow, from: nil)
+        switch mode {
+        case .freeform:
+            path?.line(to: point)
+        case .rectangle:
+            let rect = CGRect(
+                x: min(dragStart.x, point.x), y: min(dragStart.y, point.y),
+                width: abs(point.x - dragStart.x), height: abs(point.y - dragStart.y)
+            )
+            // Whole points keep the snip's edges crisp.
+            path = NSBezierPath(rect: rect.integral)
+        }
         needsDisplay = true
     }
 

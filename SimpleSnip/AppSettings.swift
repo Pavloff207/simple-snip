@@ -1,11 +1,18 @@
 import Foundation
 
+/// The outline the user draws when snipping.
+enum SnipMode: String {
+    case freeform
+    case rectangle
+}
+
 @MainActor
 final class AppSettings: ObservableObject {
     static let shared = AppSettings()
 
     private enum Key {
         static let snipShortcut = "snipShortcut"
+        static let snipMode = "snipMode"
         static let autoCopyChanges = "autoCopyChanges"
         static let askToSaveEdits = "askToSaveEdits"
         static let penStyle = "penStyle"
@@ -23,6 +30,10 @@ final class AppSettings: ObservableObject {
 
     /// False when macOS or another app already owns the chosen shortcut.
     @Published private(set) var snipShortcutIsAvailable = true
+
+    @Published var snipMode: SnipMode {
+        didSet { defaults.set(snipMode.rawValue, forKey: Key.snipMode) }
+    }
 
     /// Copies the screenshot to the clipboard again after every edit.
     @Published var autoCopyChanges: Bool {
@@ -48,6 +59,7 @@ final class AppSettings: ObservableObject {
             Key.askToSaveEdits: true,
         ])
         snipShortcut = Self.load(Shortcut.self, forKey: Key.snipShortcut) ?? .defaultSnip
+        snipMode = defaults.string(forKey: Key.snipMode).flatMap(SnipMode.init) ?? .freeform
         autoCopyChanges = defaults.bool(forKey: Key.autoCopyChanges)
         askToSaveEdits = defaults.bool(forKey: Key.askToSaveEdits)
         penStyle = Self.load(InkStyle.self, forKey: Key.penStyle) ?? .defaultPen

@@ -42,8 +42,9 @@ final class SnipController {
     }
 
     private func showOverlays(for frozenScreens: [FrozenScreen]) {
+        let mode = AppSettings.shared.snipMode
         overlays = frozenScreens.map { frozen in
-            SnipOverlayWindow(frozen: frozen) { [weak self] image in
+            SnipOverlayWindow(frozen: frozen, mode: mode) { [weak self] image in
                 self?.finish(with: image, scale: frozen.screen.backingScaleFactor)
             }
         }

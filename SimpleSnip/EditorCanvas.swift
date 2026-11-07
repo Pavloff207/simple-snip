@@ -18,6 +18,7 @@ struct EditorCanvas: NSViewRepresentable {
 final class EditorCanvasView: NSView {
     private let model: EditorModel
     private var changes: AnyCancellable?
+    private var styleChanges: AnyCancellable?
     private var liveStroke: InkStroke?
     private var cropDrag: CropDrag?
 
@@ -31,6 +32,13 @@ final class EditorCanvasView: NSView {
             DispatchQueue.main.async {
                 guard let self else { return }
                 self.needsDisplay = true
+                self.window?.invalidateCursorRects(for: self)
+            }
+        }
+        // The pen and highlighter cursors follow the chosen color and size.
+        styleChanges = AppSettings.shared.objectWillChange.sink { [weak self] _ in
+            DispatchQueue.main.async {
+                guard let self else { return }
                 self.window?.invalidateCursorRects(for: self)
             }
         }
@@ -132,8 +140,12 @@ final class EditorCanvasView: NSView {
 
     override func resetCursorRects() {
         switch model.tool {
-        case .pen, .highlighter, .eraser:
-            addCursorRect(bounds, cursor: .crosshair)
+        case .pen, .highlighter:
+            guard let kind = model.tool.inkKind else { return }
+            let style = AppSettings.shared.style(for: kind)
+            addCursorRect(bounds, cursor: InkCursor.make(kind: kind, style: style, zoom: imageToView.a))
+        case .eraser:
+            addCursorRect(bounds, cursor: InkCursor.eraser(diameter: eraserTolerance * 2 * imageToView.a))
         case .crop:
             addCursorRect(model.pendingCrop.applying(imageToView), cursor: .openHand)
         }
@@ -249,5 +261,68 @@ private struct CropDrag {
         if edges.contains(.bottom) { minY = min(max(bounds.minY, original.minY + dy), maxY - minimumSize) }
         if edges.contains(.top) { maxY = max(min(bounds.maxY, original.maxY + dy), minY + minimumSize) }
         return CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
+    }
+}
+
+/// Pointers that show the tip of the current tool at its real size on screen.
+private enum InkCursor {
+    /// Big enough for the thickest highlighter at 100%, small enough for macOS to accept.
+    private static let maxSize: CGFloat = 96
+
+    static func make(kind: InkKind, style: InkStyle, zoom: CGFloat) -> NSCursor {
+        let tip = min(max(style.width * zoom, 1), maxSize)
+        switch kind {
+        case .pen:
+            // A round dot in the pen's color, like the end of a felt-tip.
+            let diameter = max(tip, 4)
+            return cursor(size: CGSize(width: diameter, height: diameter)) { rect in
+                let dot = NSBezierPath(ovalIn: rect)
+                style.color.setFill()
+                dot.fill()
+                outline(dot)
+            }
+        case .highlighter:
+            // A tall chisel tip, as tall as the highlight is thick.
+            let height = max(tip, 8)
+            let width = max(height / 3, 4)
+            return cursor(size: CGSize(width: width, height: height)) { rect in
+                let chisel = NSBezierPath(roundedRect: rect, xRadius: 1.5, yRadius: 1.5)
+                style.color.withAlphaComponent(0.55).setFill()
+                chisel.fill()
+                outline(chisel)
+            }
+        }
+    }
+
+    /// An empty ring that matches what the eraser touches.
+    static func eraser(diameter: CGFloat) -> NSCursor {
+        let size = min(max(diameter, 8), maxSize)
+        return cursor(size: CGSize(width: size, height: size)) { rect in
+            let ring = NSBezierPath(ovalIn: rect)
+            NSColor.white.withAlphaComponent(0.35).setFill()
+            ring.fill()
+            outline(ring)
+        }
+    }
+
+    /// Draws the tip centered on the hot spot, with room for its outline.
+    private static func cursor(size: CGSize, draw: @escaping (CGRect) -> Void) -> NSCursor {
+        let margin: CGFloat = 2
+        let canvas = CGSize(width: size.width + margin * 2, height: size.height + margin * 2)
+        let image = NSImage(size: canvas, flipped: false) { _ in
+            draw(CGRect(origin: CGPoint(x: margin, y: margin), size: size))
+            return true
+        }
+        return NSCursor(image: image, hotSpot: CGPoint(x: canvas.width / 2, y: canvas.height / 2))
+    }
+
+    /// A dark ring inside a light one, so the tip shows up on any background.
+    private static func outline(_ path: NSBezierPath) {
+        NSColor.white.withAlphaComponent(0.9).setStroke()
+        path.lineWidth = 2
+        path.stroke()
+        NSColor.black.withAlphaComponent(0.7).setStroke()
+        path.lineWidth = 1
+        path.stroke()
     }
 }

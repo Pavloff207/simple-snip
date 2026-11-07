@@ -1,12 +1,31 @@
 import SwiftUI
 import Carbon.HIToolbox
+import ServiceManagement
 
 struct SettingsView: View {
     @ObservedObject private var settings = AppSettings.shared
+    @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
+    @State private var launchAtLoginMessage: String?
 
     var body: some View {
         Form {
+            Section("General") {
+                Toggle("Launch Simple Snip at login", isOn: $launchAtLogin)
+                    .onChange(of: launchAtLogin) { _, enabled in
+                        setLaunchAtLogin(enabled)
+                    }
+                if let launchAtLoginMessage {
+                    Text(launchAtLoginMessage)
+                        .font(.callout)
+                        .foregroundStyle(.secondary)
+                }
+            }
             Section("Snipping") {
+                Picker("Snip shape", selection: $settings.snipMode) {
+                    Text("Freeform").tag(SnipMode.freeform)
+                    Text("Rectangle").tag(SnipMode.rectangle)
+                }
+                .pickerStyle(.segmented)
                 Toggle(isOn: $settings.autoCopyChanges) {
                     Text("Automatically copy changes")
                     Text("Copy the screenshot to the clipboard again after every edit.")
@@ -36,6 +55,23 @@ struct SettingsView: View {
         .formStyle(.grouped)
         .frame(width: 460)
         .fixedSize()
+    }
+
+    private func setLaunchAtLogin(_ enabled: Bool) {
+        let service = SMAppService.mainApp
+        do {
+            if enabled, service.status != .enabled {
+                try service.register()
+            } else if !enabled, service.status == .enabled {
+                try service.unregister()
+            }
+            launchAtLoginMessage = service.status == .requiresApproval
+                ? "Allow Simple Snip in System Settings → General → Login Items & Extensions."
+                : nil
+        } catch {
+            launchAtLoginMessage = "Couldn't change this: \(error.localizedDescription)"
+        }
+        launchAtLogin = service.status == .enabled
     }
 }
 
