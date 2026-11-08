@@ -59,7 +59,7 @@ final class AppSettings: ObservableObject {
             Key.askToSaveEdits: true,
         ])
         snipShortcut = Self.load(Shortcut.self, forKey: Key.snipShortcut) ?? .defaultSnip
-        snipMode = defaults.string(forKey: Key.snipMode).flatMap(SnipMode.init) ?? .freeform
+        snipMode = defaults.string(forKey: Key.snipMode).flatMap(SnipMode.init) ?? .rectangle
         autoCopyChanges = defaults.bool(forKey: Key.autoCopyChanges)
         askToSaveEdits = defaults.bool(forKey: Key.askToSaveEdits)
         penStyle = Self.load(InkStyle.self, forKey: Key.penStyle) ?? .defaultPen

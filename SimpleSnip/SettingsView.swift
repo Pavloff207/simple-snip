@@ -22,8 +22,8 @@ struct SettingsView: View {
             }
             Section("Snipping") {
                 Picker("Snip shape", selection: $settings.snipMode) {
-                    Text("Freeform").tag(SnipMode.freeform)
                     Text("Rectangle").tag(SnipMode.rectangle)
+                    Text("Freeform").tag(SnipMode.freeform)
                 }
                 .pickerStyle(.segmented)
                 Toggle(isOn: $settings.autoCopyChanges) {

@@ -23,13 +23,13 @@
 
 ## Coming from Windows?
 
-Simple Snip works the way you're used to. Press a shortcut, the screen freezes, and you draw around what you want, in any shape you like. The snip goes straight to your clipboard and opens in a small window where you can draw on it, highlight it, crop it, save it or print it.
+Simple Snip works the way you're used to. Press a shortcut, the screen freezes, and you drag a rectangle around what you want, or, in freeform mode, draw any shape. The snip goes straight to your clipboard and opens in a small window where you can draw on it, highlight it, crop it, save it or print it.
 
 macOS's built-in screenshot tool only takes rectangles and windows. Simple Snip adds the **freeform snip** and a **quick markup editor** that opens right away.
 
 ## Features
 
-- **Freeform or rectangle snips.** Draw any outline, or drag a rectangle. Choose in Settings.
+- **Rectangle or freeform snips.** Drag a rectangle, or switch to freeform in Settings and draw any outline.
 - **Every display.** The screen freezes while you snip, so menus and tooltips stay put.
 - **Straight to the clipboard,** ready to paste into chat, email or a document.
 - **Mark it up:**

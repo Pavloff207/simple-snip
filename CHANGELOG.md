@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1 (2026-11-08)
+
+- Rectangle is now the default snip shape. Freeform is one click away in Settings → Snipping.
+
 ## 0.1.0 (2026-11-08)
 
 First public release.

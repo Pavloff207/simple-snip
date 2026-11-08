@@ -3,7 +3,7 @@
 A macOS take on the Windows Snipping Tool workflow, with its own name and icon. Open source (MIT) at github.com/Pavloff207/simple-snip. Developer ID signing and notarization come later.
 
 ## What it does (and doesn't)
-- Freeform or rectangle snip (Settings → Snipping → Snip shape), on a frozen copy of every display.
+- Rectangle (default) or freeform snip (Settings → Snipping → Snip shape), on a frozen copy of every display.
 - Editor: pen and highlighter (color palettes, size sliders; default pen red), eraser, crop, undo/redo, copy, save as PNG/JPEG, print.
 - Settings: hotkey (default ⌘⇧2), launch at login, auto-copy edits, ask to save edits.
 - Shown in the Dock and the menu bar. Each snip opens its own editor window, and that's intended (no "multiple windows" setting).
