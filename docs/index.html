@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simple Snip: free freeform screen snipping tool for Mac</title>
+<meta name="description" content="Simple Snip is a free, open-source screen snipping tool for macOS. Draw any shape around what you want to capture, then mark it up with a pen and highlighter. Familiar if you're coming from Windows.">
+<link rel="canonical" href="https://pavloff207.github.io/simple-snip/">
+<link rel="icon" type="image/png" href="images/icon.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Simple Snip: freeform screen snips for Mac">
+<meta property="og:description" content="Draw around anything on your screen to snip it, then mark it up. Free and open source.">
+<meta property="og:url" content="https://pavloff207.github.io/simple-snip/">
+<meta property="og:image" content="https://pavloff207.github.io/simple-snip/images/social-preview.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Simple Snip",
+  "operatingSystem": "macOS 26 or later",
+  "applicationCategory": "UtilitiesApplication",
+  "description": "A free, open-source screen snipping tool for macOS with freeform and rectangle snips and a pen and highlighter editor.",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "downloadUrl": "https://github.com/Pavloff207/simple-snip/releases/latest/download/SimpleSnip.zip",
+  "license": "https://opensource.org/licenses/MIT"
+}
+</script>
+<style>
+  :root {
+    --bg: #f6f7fb; --surface: #ffffff; --text: #1b2130; --muted: #5d6578;
+    --accent: #3f51e0; --accent-ink: #ffffff; --line: #e3e6ef;
+    --hero-a: #1e3a8a; --hero-b: #4f46e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #11131a; --surface: #1a1d27; --text: #eceef4; --muted: #a2a9ba;
+      --accent: #7b8cff; --accent-ink: #0f1220; --line: #2a2f3d;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
+  }
+  a { color: var(--accent); }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+
+  .hero {
+    background: linear-gradient(135deg, var(--hero-a), var(--hero-b));
+    color: #fff; padding: 56px 0 0; overflow: hidden;
+  }
+  .hero .wrap { display: grid; gap: 28px; text-align: center; }
+  .hero img.icon { width: 104px; height: 104px; margin: 0 auto; }
+  .hero h1 { font-size: clamp(36px, 7vw, 60px); line-height: 1.05; margin: 0; letter-spacing: -1px; }
+  .hero p.lead { font-size: clamp(18px, 2.6vw, 22px); margin: 0 auto; max-width: 640px; opacity: .9; }
+  .buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+  .button {
+    display: inline-block; padding: 13px 24px; border-radius: 12px; font-weight: 600;
+    text-decoration: none; background: #fff; color: #1e2a78;
+  }
+  .button.ghost { background: rgba(255,255,255,.14); color: #fff; }
+  .small { font-size: 14px; opacity: .8; margin: -10px 0 0; }
+  .hero img.demo {
+    width: 100%; max-width: 900px; margin: 12px auto -6px; border-radius: 14px 14px 0 0;
+    box-shadow: 0 -10px 50px rgba(0,0,0,.3); display: block;
+  }
+
+  section { padding: 64px 0 8px; }
+  h2 { font-size: 30px; letter-spacing: -.4px; margin: 0 0 14px; }
+  .intro { max-width: 720px; color: var(--muted); font-size: 19px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 24px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 22px; }
+  .card h3 { margin: 0 0 6px; font-size: 18px; }
+  .card p { margin: 0; color: var(--muted); font-size: 16px; }
+  .card .emoji { font-size: 26px; display: block; margin-bottom: 8px; }
+
+  ol.steps { padding-left: 22px; max-width: 760px; }
+  ol.steps li { margin-bottom: 10px; }
+  kbd {
+    font: 600 14px/1 ui-monospace, SFMono-Regular, monospace; padding: 3px 7px; border-radius: 6px;
+    border: 1px solid var(--line); background: var(--surface);
+  }
+  details { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; margin-bottom: 10px; max-width: 760px; }
+  summary { font-weight: 600; cursor: pointer; }
+  details p { color: var(--muted); margin: 10px 0 0; }
+
+  footer { padding: 56px 0 40px; color: var(--muted); font-size: 15px; text-align: center; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <img class="icon" src="images/icon.png" alt="">
+    <h1>Simple Snip</h1>
+    <p class="lead">Draw around anything on your screen to snip it, in any shape you like, then mark it up. A free, open-source snipping tool for Mac.</p>
+    <div class="buttons">
+      <a class="button" href="https://github.com/Pavloff207/simple-snip/releases/latest/download/SimpleSnip.zip">Download for Mac</a>
+      <a class="button ghost" href="https://github.com/Pavloff207/simple-snip">View on GitHub</a>
+    </div>
+    <p class="small">Free · macOS 26 or later · Apple silicon and Intel</p>
+    <img class="demo" src="images/demo.gif" width="960" height="600" alt="Drawing a freeform outline around a chart, then highlighting and circling part of it in the Simple Snip editor">
+  </div>
+</header>
+
+<main class="wrap">
+  <section>
+    <h2>Coming from Windows?</h2>
+    <p class="intro">If you used the Snipping Tool on a PC, you already know how this works. Press a shortcut, the screen freezes, and you draw around what you want. The snip goes straight to your clipboard and opens in a little editor for highlighting, circling, cropping, saving or printing. macOS's own screenshot tool only takes rectangles and windows; Simple Snip adds the freeform snip and the quick markup step.</p>
+  </section>
+
+  <section>
+    <h2>Everything you need, nothing you don't</h2>
+    <div class="grid">
+      <div class="card"><span class="emoji">✂️</span><h3>Freeform or rectangle</h3><p>Draw any outline, or drag a rectangle. Pick the shape in Settings.</p></div>
+      <div class="card"><span class="emoji">🖍️</span><h3>Pen and highlighter</h3><p>Color palettes, adjustable size, eraser, crop, undo and redo.</p></div>
+      <div class="card"><span class="emoji">📋</span><h3>Straight to the clipboard</h3><p>Paste it into chat, email or a document the moment you let go.</p></div>
+      <div class="card"><span class="emoji">🖨️</span><h3>Save or print</h3><p>PNG or JPEG, or straight to your printer.</p></div>
+      <div class="card"><span class="emoji">⌨️</span><h3>Your shortcut</h3><p>⌘⇧2 by default, or any key combination you like. Launches at login if you want it to.</p></div>
+      <div class="card"><span class="emoji">🔒</span><h3>Private by design</h3><p>No accounts, no analytics, no network access. Your screenshots never leave your Mac.</p></div>
+    </div>
+  </section>
+
+  <section id="install">
+    <h2>Install in a minute</h2>
+    <ol class="steps">
+      <li><a href="https://github.com/Pavloff207/simple-snip/releases/latest/download/SimpleSnip.zip">Download SimpleSnip.zip</a>, open it, and drag <b>Simple Snip</b> into <b>Applications</b>.</li>
+      <li>Open it. The first time, macOS says it can't verify the app, because Simple Snip isn't notarized by Apple yet (it's coming). Click <b>Done</b>, then go to <b>System Settings → Privacy &amp; Security</b>, scroll down, and click <b>Open Anyway</b>.</li>
+      <li>Press <kbd>⌘</kbd> <kbd>⇧</kbd> <kbd>2</kbd>, allow <b>Screen &amp; System Audio Recording</b> when macOS asks, and reopen Simple Snip. You're set.</li>
+    </ol>
+    <p>Prefer Homebrew? <code>brew install --cask pavloff207/tap/simple-snip</code></p>
+  </section>
+
+  <section>
+    <h2>Questions</h2>
+    <details><summary>Is it really free?</summary><p>Yes. Simple Snip is open source under the MIT license, with no ads, accounts or in-app purchases.</p></details>
+    <details><summary>Why does it need screen recording permission?</summary><p>To take the screenshot; macOS asks that of every screenshot app. Simple Snip has no network access, so nothing it captures can leave your Mac.</p></details>
+    <details><summary>How do I change the shortcut or the snip shape?</summary><p>Click the scissors icon in the menu bar and choose Settings.</p></details>
+    <details><summary>How do I uninstall it?</summary><p>Quit it from the menu bar icon and drag it from Applications to the Trash.</p></details>
+    <details><summary>I found a bug or have an idea.</summary><p><a href="https://github.com/Pavloff207/simple-snip/issues/new/choose">Open an issue on GitHub</a>, or start a conversation in <a href="https://github.com/Pavloff207/simple-snip/discussions">Discussions</a>.</p></details>
+  </section>
+</main>
+
+<footer>
+  Simple Snip is made by Andrey Pavlov and released under the MIT license. Not affiliated with Apple or Microsoft.<br>
+  <a href="https://github.com/Pavloff207/simple-snip">Source on GitHub</a> · <a href="https://github.com/Pavloff207/simple-snip/blob/main/CHANGELOG.md">Changelog</a>
+</footer>
+
+</body>
+</html>

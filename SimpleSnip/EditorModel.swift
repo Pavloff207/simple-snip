@@ -203,6 +203,32 @@ final class EditorModel: ObservableObject {
         }
     }
 
+    /// Shows the print panel. The snip prints at its on-screen size, shrunk to fit the page if needed.
+    func print(from window: NSWindow?) {
+        guard let rendered = render() else { return }
+        let size = CGSize(width: CGFloat(rendered.width) / scale, height: CGFloat(rendered.height) / scale)
+        let imageView = NSImageView(frame: CGRect(origin: .zero, size: size))
+        imageView.image = NSImage(cgImage: rendered, size: size)
+        imageView.imageScaling = .scaleProportionallyUpOrDown
+
+        let info = NSPrintInfo.shared.copy() as! NSPrintInfo
+        info.orientation = size.width > size.height ? .landscape : .portrait
+        info.horizontalPagination = .fit
+        info.verticalPagination = .fit
+        info.isHorizontallyCentered = true
+        info.isVerticallyCentered = false
+        info.jobDisposition = .spool
+
+        let operation = NSPrintOperation(view: imageView, printInfo: info)
+        operation.jobTitle = suggestedFileName
+        operation.printPanel.options.formUnion([.showsOrientation, .showsScaling, .showsPreview])
+        if let window {
+            operation.runModal(for: window, delegate: nil, didRun: nil, contextInfo: nil)
+        } else {
+            operation.run()
+        }
+    }
+
     func discardChanges() {
         hasUnsavedChanges = false
     }

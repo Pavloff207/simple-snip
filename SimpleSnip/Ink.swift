@@ -33,7 +33,7 @@ struct InkStyle: Codable, Equatable {
     var colorHex: String
     var width: Double
 
-    static let defaultPen = InkStyle(colorHex: "#000000", width: 3)
+    static let defaultPen = InkStyle(colorHex: "#E61B1B", width: 3)
     static let defaultHighlighter = InkStyle(colorHex: "#FFFF00", width: 16)
 
     var color: NSColor { NSColor(hex: colorHex) }

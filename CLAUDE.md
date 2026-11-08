@@ -1,10 +1,10 @@
 # Simple Snip
 
-A macOS take on the Windows Snipping Tool workflow, with its own name and icon. Built for Andrey and a few friends; Developer ID distribution comes later.
+A macOS take on the Windows Snipping Tool workflow, with its own name and icon. Open source (MIT) at github.com/Pavloff207/simple-snip. Developer ID signing and notarization come later.
 
 ## What it does (and doesn't)
 - Freeform or rectangle snip (Settings → Snipping → Snip shape), on a frozen copy of every display.
-- Editor: pen and highlighter (color palettes, size sliders), eraser, crop, undo/redo, copy, save as PNG/JPEG.
+- Editor: pen and highlighter (color palettes, size sliders; default pen red), eraser, crop, undo/redo, copy, save as PNG/JPEG, print.
 - Settings: hotkey (default ⌘⇧2), launch at login, auto-copy edits, ask to save edits.
 - Shown in the Dock and the menu bar. Each snip opens its own editor window, and that's intended (no "multiple windows" setting).
 - Deliberately left out: delay timer, screen recording, OCR/text extraction, ruler.
@@ -32,6 +32,12 @@ xcodebuild -project SimpleSnip.xcodeproj -scheme SimpleSnip -configuration Debug
 ```bash
 pkill -x SimpleSnip; sleep 1; rm -rf /Applications/SimpleSnip.app && ditto "$TMPDIR/SimpleSnipDerivedData/Build/Products/Debug/SimpleSnip.app" /Applications/SimpleSnip.app && open /Applications/SimpleSnip.app
 ```
+
+## Releases
+- Public builds are universal (`-destination 'generic/platform=macOS' ARCHS="arm64 x86_64"`) and ad-hoc signed until there's a Developer ID, so they don't carry the personal Apple Development certificate.
+- Attach the build as `SimpleSnip.zip` so `releases/latest/download/SimpleSnip.zip` keeps working. Update CHANGELOG.md and MARKETING_VERSION.
+- Regenerate README/site images with `Tools/demo/make_demo.sh` when the UI changes.
+- The website is `docs/index.html` (GitHub Pages from `main` /docs). The Homebrew tap is github.com/Pavloff207/homebrew-tap.
 
 ## Working agreements
 - After a change, rebuild and reinstall to /Applications without asking. Losing an in-progress snip is fine.

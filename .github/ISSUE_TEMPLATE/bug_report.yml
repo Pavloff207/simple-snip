@@ -1,0 +1,34 @@
+name: Bug report
+description: Something doesn't work as it should.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version
+      placeholder: "26.1"
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Simple Snip version
+      description: Shown in Finder → Applications → Simple Snip → Get Info.
+      placeholder: "0.1.0"
+  - type: dropdown
+    id: mac
+    attributes:
+      label: Mac
+      options: [Apple silicon, Intel]
+  - type: input
+    id: displays
+    attributes:
+      label: Number of displays
+      placeholder: "1"

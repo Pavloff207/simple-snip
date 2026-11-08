@@ -52,6 +52,10 @@ struct EditorView: View {
                     model.save(from: window())
                 }
                 .keyboardShortcut("s", modifiers: .command)
+                ToolbarIconButton(symbol: "printer", help: "Print (⌘P)") {
+                    model.print(from: window())
+                }
+                .keyboardShortcut("p", modifiers: .command)
             }
         }
     }

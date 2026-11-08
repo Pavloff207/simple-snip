@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    width: 1280px; height: 800px; overflow: hidden;
+    font: 15px/1.5 -apple-system, "SF Pro Text", sans-serif;
+    color: #1d2330; background: #f4f5f8;
+  }
+  header {
+    height: 56px; background: #fff; border-bottom: 1px solid #e3e6ec;
+    display: flex; align-items: center; padding: 0 80px; gap: 28px;
+  }
+  header b { font-size: 18px; color: #2f5bd3; margin-right: 24px; }
+  header span { color: #5c6475; }
+  main { position: relative; padding: 40px 80px; }
+  h1 { font-size: 32px; letter-spacing: -0.5px; }
+  .lede { color: #5c6475; margin-top: 6px; width: 620px; }
+  .card {
+    position: absolute; background: #fff; border-radius: 14px;
+    box-shadow: 0 1px 3px rgba(20,30,60,.08), 0 6px 20px rgba(20,30,60,.06);
+    padding: 22px 26px;
+  }
+  .chart { left: 80px; top: 160px; width: 620px; height: 380px; }
+  .chart h2 { font-size: 17px; }
+  .chart p { color: #7a8294; font-size: 13px; }
+  .bars { display: flex; align-items: flex-end; gap: 14px; height: 230px; margin-top: 18px; }
+  .bars div { flex: 1; text-align: center; font-size: 12px; color: #7a8294; }
+  .bars i { display: block; border-radius: 6px 6px 2px 2px; background: #b9c8f2; margin-bottom: 6px; }
+  .bars .hot i { background: #2f5bd3; }
+  .bars em { display: block; font-style: normal; font-weight: 600; color: #1d2330; font-size: 13px; }
+  .side { left: 740px; top: 160px; width: 460px; height: 380px; }
+  .side h2 { font-size: 17px; margin-bottom: 12px; }
+  .row { display: flex; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid #eef0f4; }
+  .row:last-child { border: 0; }
+  .row span { color: #5c6475; }
+  .tag { display: inline-block; padding: 1px 9px; border-radius: 10px; background: #e5f5ea; color: #217a3c; font-size: 12px; font-weight: 600; }
+  .notes { left: 80px; top: 572px; width: 1120px; height: 170px; }
+  .notes h2 { font-size: 17px; margin-bottom: 8px; }
+  .notes p { color: #4a5263; width: 1000px; }
+</style>
+</head>
+<body>
+  <header><b>◐ Wayfarer</b><span>Destinations</span><span>Guides</span><span>Planner</span><span>Saved</span></header>
+  <main>
+    <h1>Weekend in Lisbon: when to go</h1>
+    <p class="lede">Average afternoon temperatures and what to pack, month by month.</p>
+
+    <section class="card chart">
+      <h2>Average high, °C</h2>
+      <p>Based on the last ten years</p>
+      <div class="bars">
+        <div><i style="height:62px"></i>15<em>Jan</em></div>
+        <div><i style="height:72px"></i>16<em>Feb</em></div>
+        <div><i style="height:92px"></i>19<em>Mar</em></div>
+        <div><i style="height:104px"></i>20<em>Apr</em></div>
+        <div><i style="height:126px"></i>23<em>May</em></div>
+        <div class="hot"><i style="height:158px"></i>26<em>Jun</em></div>
+        <div class="hot"><i style="height:178px"></i>28<em>Jul</em></div>
+        <div class="hot"><i style="height:182px"></i>29<em>Aug</em></div>
+        <div><i style="height:160px"></i>27<em>Sep</em></div>
+        <div><i style="height:118px"></i>22<em>Oct</em></div>
+      </div>
+    </section>
+
+    <section class="card side">
+      <h2>Trip checklist</h2>
+      <div class="row"><span>Flights</span><b>Fri 18:40 → Sun 21:15</b></div>
+      <div class="row"><span>Hotel</span><b>Alfama, 2 nights</b></div>
+      <div class="row"><span>Tram 28 pass</span><span class="tag">Booked</span></div>
+      <div class="row"><span>Belém tower</span><b>Sat 10:00</b></div>
+      <div class="row"><span>Dinner</span><b>Sat 20:30, table for 4</b></div>
+      <div class="row"><span>Budget</span><b>€640 per person</b></div>
+    </section>
+
+    <section class="card notes">
+      <h2>Packing notes</h2>
+      <p>Evenings by the river stay breezy even in summer, so bring a light jacket. The old town is hilly and paved with smooth stone: comfortable shoes with grip beat sandals. Most museums close on Mondays.</p>
+    </section>
+  </main>
+</body>
+</html>
